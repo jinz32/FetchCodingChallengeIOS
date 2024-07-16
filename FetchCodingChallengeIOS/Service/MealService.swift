@@ -16,7 +16,7 @@ class MealService {
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let result = try JSONDecoder().decode(MealSearch.self, from: data)
+            let result = try JSONDecoder().decode(Response.self, from: data)
             if let meals = result.meals {
                 return meals
             } else {
@@ -39,7 +39,7 @@ class DetailMealService {
         }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let meal = try JSONDecoder().decode(MealSearch.self, from: data).meals?.first
+            let meal = try JSONDecoder().decode(Response.self, from: data).meals?.first
             if let meal = meal {
                 return meal
             } else {
@@ -51,6 +51,6 @@ class DetailMealService {
     }
 }
 
-struct MealSearch: Decodable {
+struct Response: Decodable {
     let meals: [Meal]?
 }
