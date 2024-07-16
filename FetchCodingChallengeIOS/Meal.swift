@@ -13,7 +13,7 @@ struct Meal: Identifiable, Decodable, Hashable {
     var strMealThumb: String
     var idMeal: String
     var ingredients: [Ingredient] = []
-    var strInstructions: String? // Make this optional
+    var strInstructions: String?
     
     enum CodingKeys: String, CodingKey {
         case strMeal

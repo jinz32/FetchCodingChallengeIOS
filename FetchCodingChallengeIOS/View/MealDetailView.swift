@@ -10,7 +10,6 @@ import SwiftUI
 struct MealDetailView: View {
     @ObservedObject var viewModel: MealDetailViewModel
     
-    
     var body: some View {
         VStack {
             if viewModel.isLoading {
