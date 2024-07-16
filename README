@@ -1,3 +1,15 @@
-Fetch IOS Coding Assignment 
+#Fetch IOS Coding Assignment 
+
 IOS Engineer Full Time Role 
 Candidate: Jonathan Zheng
+
+Summary
+API calls were done through ASYNC and fetched a simple list of desserts from the provided api: 
+https://themealdb.com/api/json/v1/1/filter.php?c=Dessert 
+The list was then sorted alphabetically
+Detail Meal Information from the below:
+www.themealdb.com/api/json/v1/1/lookup.php?i=\(mealId)
+
+
+/Users/jonathanzheng/Desktop/Meal List.png
+/Users/jonathanzheng/Desktop/Meal Detail.png
