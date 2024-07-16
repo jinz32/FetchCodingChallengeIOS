@@ -9,21 +9,26 @@ import Foundation
 import Combine
 
 class MealDetailViewModel: ObservableObject {
-    private let ingredientsService = DetailMealService()
-    
-    @Published var ingredients: [Ingredient] = []
     @Published var isLoading: Bool = false
-    @Published var isError: Bool = false
-    @Published var mealName: String = ""
-    @Published var instructions: String = ""
-
+    
+    private let ingredientsService = DetailMealService()
+    var isError: Bool = false
+    var mealName: String
+    var idMeal: String
+    var instructions: String = ""
+    var ingredients: [Ingredient] = []
+    
+    init(idMeal: String, mealName: String){
+        self.idMeal = idMeal
+        self.mealName = mealName
+    }
+    
     @MainActor
     func fetchIngredients(forMealId mealId: String) {
         Task {
             do {
                 isLoading = true
                 let fetchedMeal = try await ingredientsService.fetchMealDetails(forMealId: mealId)
-                
                 DispatchQueue.main.async {
                     self.instructions = fetchedMeal.strInstructions ?? ""
                     self.ingredients = fetchedMeal.ingredients

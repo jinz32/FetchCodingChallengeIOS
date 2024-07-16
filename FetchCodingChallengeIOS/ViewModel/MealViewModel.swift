@@ -7,27 +7,29 @@
 
 import Foundation
 class MealViewModel: ObservableObject {
-    @Published var meals: [Meal] = []
-       @Published var errorMessage: String?
-       private let mealService = MealService()
-       
-       func fetchMeals() {
-           Task {
-               do {
-                   let fetchedMeals = try await mealService.fetchMeals()
-                   
-                   DispatchQueue.main.async {
-                       self.meals = fetchedMeals
-                   }
-               } catch {
-                   DispatchQueue.main.async {
-                       self.errorMessage = error.localizedDescription
-                   }
-               }
-           }
-       }
-       
-       func sortMealsAlphabetically() {
-           meals.sort { $0.strMeal < $1.strMeal }
-       }
-   }
+    var meals: [Meal] = []
+    var errorMessage: String?
+    @Published var isLoading = true
+    
+    private let mealService = MealService()
+    
+    func fetchMeals() {
+        isLoading = true
+        Task {
+            do {
+                let fetchedMeals = try await mealService.fetchMeals()
+                let sortedMeals = fetchedMeals.sorted { $0.strMeal < $1.strMeal }
+                DispatchQueue.main.async {
+                    self.errorMessage = nil
+                    self.meals = sortedMeals
+                    self.isLoading = false
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+}

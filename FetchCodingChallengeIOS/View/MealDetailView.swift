@@ -8,46 +8,57 @@
 import SwiftUI
 
 struct MealDetailView: View {
-    @StateObject private var viewModel = MealDetailViewModel()
-    let mealId: String
-    let mealName: String
+    @ObservedObject var viewModel: MealDetailViewModel
+    
     
     var body: some View {
         VStack {
             if viewModel.isLoading {
-                ProgressView("Loading...")
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .padding()
+                loadingView
             } else if viewModel.isError {
-                Text("Failed to load meal details.")
-                    .foregroundColor(.red)
-                    .padding()
+                errorView
             } else {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Instructions:")
-                            .font(.headline)
-                            .padding(.top)
-                        Text(viewModel.instructions)
-                            .font(.body)
-                            .multilineTextAlignment(.leading)
-                            .padding(.horizontal)
-                        Text("Ingredients:")
-                            .font(.headline)
-                        
-                        ForEach(viewModel.ingredients) { ingredient in
-                            Text("\(ingredient.strIngredient) - \(ingredient.strMeasure )")
-                                .font(.body)
-                        }
-                    }
-                    .padding()
-                }
+                mealDetailView
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarTitle(mealName)
+        .navigationBarTitle(viewModel.mealName, displayMode: .inline)
         .onAppear {
-            viewModel.fetchIngredients(forMealId: mealId)
+            viewModel.fetchIngredients(forMealId: viewModel.idMeal)
+        }
+    }
+    
+    private var loadingView: some View {
+        ProgressView("Loading...")
+            .progressViewStyle(CircularProgressViewStyle())
+            .padding()
+    }
+    
+    private var errorView: some View {
+        Text("Failed to load meal details.")
+            .foregroundColor(.red)
+            .padding()
+    }
+    
+    private var mealDetailView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Instructions:")
+                    .font(.headline)
+                    .padding(.top)
+                Text(viewModel.instructions)
+                    .font(.body)
+                    .multilineTextAlignment(.leading)
+                    .padding(.horizontal)
+                
+                Text("Ingredients:")
+                    .font(.headline)
+                
+                ForEach(viewModel.ingredients) { ingredient in
+                    Text("\(ingredient.strIngredient) - \(ingredient.strMeasure )")
+                        .font(.body)
+                }
+            }
+            .padding()
         }
     }
 }

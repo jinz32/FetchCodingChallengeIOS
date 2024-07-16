@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Meal: Identifiable, Decodable, Hashable {
+struct Meal: Identifiable, Decodable, Hashable {
     var id: String { idMeal }
     var strMeal: String
     var strMealThumb: String
@@ -63,7 +63,7 @@ class Meal: Identifiable, Decodable, Hashable {
         case strinstructions
     }
     
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         strMeal = try container.decode(String.self, forKey: .strMeal)
         strMealThumb = try container.decode(String.self, forKey: .strMealThumb)
@@ -82,8 +82,6 @@ class Meal: Identifiable, Decodable, Hashable {
             }
         }
         ingredients = ingredientsArray
-        
-        // Optional fields
         strInstructions = try container.decodeIfPresent(String.self, forKey: .strInstructions)
     }
     
